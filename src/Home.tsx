@@ -1,9 +1,18 @@
 import * as React from "react";
 import "./Home.css";
 
-const arr = ["kahvi", "joe", "henry", "ranch", "salad"];
+interface ResponseBody {
+  list: {
+    users: string[];
+  };
+}
 
-class Home extends React.Component<{}, { data: [string]; user: string }> {
+interface State {
+  data: string[];
+  user: string;
+}
+
+class Home extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -23,12 +32,12 @@ class Home extends React.Component<{}, { data: [string]; user: string }> {
     const data = await fetch("http://192.168.0.14:8080/users", {
       headers: { Origin: "example.com" },
     });
-    const json: { list: { users: [string] } } = await data.json();
+    const json: ResponseBody = await data.json();
 
-    const { users = [""] } = json.list;
+    const users = json.list.users === null ? [] : json.list.users;
 
-    console.log(json.list.users);
-    this.setState({ data: [""] });
+    console.log(users);
+    this.setState({ data: users });
   }
   async addUser() {
     const user = this.state.user;
