@@ -4,7 +4,7 @@
 1. Clone repository
 2. `npm i && npm run start`
 
-### Built With:
+### Built With
 - [go project backend](https://github.com/iamkahvi/go_project_backend)
 - [razzle](https://github.com/jaredpalmer/razzle.git)
 - [typescript](https://github.com/Microsoft/TypeScript)
