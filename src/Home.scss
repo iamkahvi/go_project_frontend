@@ -1,7 +1,33 @@
+// Colors
+$title-color: orange;
+
 .Home {
   text-align: left;
   max-width: 550px;
   margin: 50px auto;
+  h2 {
+    color: $title-color;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+  form {
+    margin-top: 25px;
+  }
+  fieldset {
+    padding: 15px 10px;
+    margin: 0;
+  }
+}
+form {
+  h3 {
+    color: $title-color;
+    margin: 0 0 10px 0;
+  }
+  input {
+    outline: none;
+    margin: 0;
+  }
 }
 
 .Home-logo {

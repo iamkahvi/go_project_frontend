@@ -28,7 +28,6 @@ class Home extends React.Component<{}, State> {
     this.fetchData();
   }
   async fetchData() {
-    console.log("hey there");
     const data = await fetch("http://192.168.0.14:8080/users", {
       headers: { Origin: "example.com" },
     });
@@ -36,7 +35,6 @@ class Home extends React.Component<{}, State> {
 
     const users = json.list.users === null ? [] : json.list.users;
 
-    console.log(users);
     this.setState({ data: users });
   }
   async addUser() {
@@ -70,12 +68,11 @@ class Home extends React.Component<{}, State> {
         </ul>
         <form onSubmit={this.handleSubmit}>
           <fieldset>
-            <label>Add User</label>
-            <br></br>
+            <h3>Add User</h3>
             <input
               id="user"
               type="text"
-              placeholder="user name"
+              placeholder="user"
               value={this.state.user}
               onChange={(e) => {
                 this.setState({ user: e.target.value });
