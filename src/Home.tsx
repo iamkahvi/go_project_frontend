@@ -3,22 +3,40 @@ import "./Home.scss";
 
 interface ResponseBody {
   list: {
-    users: string[];
+    users: User[];
   };
 }
 
+interface User {
+  Name: string;
+  ID: number;
+  CreatedAt: string;
+  UpdatedAt: string;
+  DeletedAt: string;
+}
+
 interface State {
-  data: string[];
+  users: User[];
   user: string;
 }
+
+const INIT_STATE: State = {
+  users: [
+    {
+      Name: "Kahvi",
+      ID: 0,
+      CreatedAt: "now",
+      UpdatedAt: "now",
+      DeletedAt: "now",
+    },
+  ],
+  user: "",
+};
 
 class Home extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
-    this.state = {
-      data: [""],
-      user: "",
-    };
+    this.state = INIT_STATE;
 
     this.fetchData = this.fetchData.bind(this);
     this.addUser = this.addUser.bind(this);
@@ -32,10 +50,12 @@ class Home extends React.Component<{}, State> {
       headers: { Origin: "example.com" },
     });
     const json: ResponseBody = await data.json();
+    console.log(json);
 
-    const users = json.list.users === null ? [] : json.list.users;
-
-    this.setState({ data: users });
+    if (json !== null) {
+      const { users } = json.list;
+      this.setState({ users });
+    }
   }
   async addUser() {
     const user = this.state.user;
@@ -46,12 +66,14 @@ class Home extends React.Component<{}, State> {
       },
       body: JSON.stringify({ user }),
     });
-    const json: { list: { users: [string] } } = await data.json();
+    const json: ResponseBody = await data.json();
+    console.log(json);
 
-    const { users = [""] } = json.list;
-
-    console.log(json.list.users);
-    this.setState({ data: users, user: "" });
+    if (json !== null) {
+      const { users } = json.list;
+      this.setState({ users });
+    }
+    this.setState({ user: "" });
   }
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -62,8 +84,8 @@ class Home extends React.Component<{}, State> {
       <div className="Home">
         <h2>Users</h2>
         <ul>
-          {this.state.data.map((user, key) => (
-            <li key={key}>{user}</li>
+          {this.state.users.map((user, key) => (
+            <li key={key}>{user.Name}</li>
           ))}
         </ul>
         <form onSubmit={this.handleSubmit}>
