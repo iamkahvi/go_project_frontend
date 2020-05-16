@@ -17,7 +17,9 @@ interface User {
 
 interface State {
   users: User[];
-  user: string;
+  inputs: {
+    name: string;
+  };
 }
 
 const INIT_STATE: State = {
@@ -30,7 +32,9 @@ const INIT_STATE: State = {
       DeletedAt: "now",
     },
   ],
-  user: "",
+  inputs: {
+    name: "",
+  },
 };
 
 class Home extends React.Component<{}, State> {
@@ -57,14 +61,35 @@ class Home extends React.Component<{}, State> {
       this.setState({ users });
     }
   }
+
+  updateInput(key: string, value: any) {
+    this.setState((prevState: State) => ({
+      ...prevState,
+      inputs: {
+        ...prevState.inputs,
+        [key]: value,
+      },
+    }));
+  }
+
+  capitalize = (s: string) => {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   async addUser() {
-    const user = this.state.user;
-    const data = await fetch("http://192.168.0.14:8080/post", {
+    const { name } = this.state.inputs;
+    const Name = name
+      .split(" ")
+      .map((word) => {
+        return this.capitalize(word);
+      })
+      .join(" ");
+    const data = await fetch("http://192.168.0.14:8080/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user }),
+      body: JSON.stringify({ user: Name }),
     });
     const json: ResponseBody = await data.json();
     console.log(json);
@@ -73,7 +98,27 @@ class Home extends React.Component<{}, State> {
       const { users } = json.list;
       this.setState({ users });
     }
-    this.setState({ user: "" });
+
+    this.updateInput("name", "");
+  }
+  async deleteUser(id: number) {
+    if (!window.confirm("Are you sure?")) {
+      return;
+    }
+    const data = await fetch("http://192.168.0.14:8080/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+    const json: ResponseBody = await data.json();
+    console.log(json);
+
+    if (json !== null) {
+      const { users } = json.list;
+      this.setState({ users });
+    }
   }
   handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -85,19 +130,24 @@ class Home extends React.Component<{}, State> {
         <h2>Users</h2>
         <ul>
           {this.state.users.map((user, key) => (
-            <li key={key}>{user.Name}</li>
+            <li key={key}>
+              <div className="item">
+                {user.Name}
+                <button onClick={() => this.deleteUser(user.ID)}>X</button>
+              </div>
+            </li>
           ))}
         </ul>
         <form onSubmit={this.handleSubmit}>
           <fieldset>
             <h3>Add User</h3>
             <input
-              id="user"
+              id="add"
               type="text"
               placeholder="user"
-              value={this.state.user}
+              value={this.state.inputs.name}
               onChange={(e) => {
-                this.setState({ user: e.target.value });
+                this.updateInput("name", e.target.value);
               }}
             ></input>
             <button type="submit">submit</button>

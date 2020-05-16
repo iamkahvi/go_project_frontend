@@ -5,25 +5,53 @@ $title-color: orange;
   text-align: left;
   max-width: 550px;
   margin: 50px auto;
+
   h2 {
     color: $title-color;
   }
+
+  ul {
+    padding-left: 25px;
+  }
+
   li {
     margin-bottom: 5px;
+    list-style-type: disc;
+
+    button {
+      outline: none;
+      background: $title-color;
+      color: white;
+      border: 1px solid transparent;
+
+      &:hover {
+        border-color: black;
+      }
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+
+    }
   }
+
   form {
     margin-top: 25px;
   }
+
   fieldset {
     padding: 15px 10px;
     margin: 0;
   }
 }
+
 form {
   h3 {
     color: $title-color;
     margin: 0 0 10px 0;
   }
+
   input {
     outline: none;
     margin: 0;
@@ -50,12 +78,17 @@ form {
   list-style: none;
 }
 
-.Home-resources > li {
+.Home-resources>li {
   display: inline-block;
   padding: 1rem;
 }
 
 @keyframes Home-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
