@@ -19,6 +19,7 @@ interface State {
   users: User[];
   inputs: {
     name: string;
+    deleteId: number;
   };
 }
 
@@ -34,6 +35,7 @@ const INIT_STATE: State = {
   ],
   inputs: {
     name: "",
+    deleteId: -1,
   },
 };
 
@@ -140,7 +142,7 @@ class Home extends React.Component<{}, State> {
             </li>
           ))}
         </ul>
-        <form onSubmit={this.handleSubmit}>
+        <form>
           <fieldset>
             <h3>Add User</h3>
             <input
@@ -152,7 +154,35 @@ class Home extends React.Component<{}, State> {
                 this.updateInput("name", e.target.value);
               }}
             ></input>
-            <button type="submit">submit</button>
+            <button type="button" onClick={() => this.addUser()}>
+              submit
+            </button>
+          </fieldset>
+          <fieldset>
+            <h3>Delete User</h3>
+            <select
+              id="edit"
+              value={this.state.inputs.deleteId}
+              onChange={(e) => {
+                this.updateInput("deleteId", e.target.value);
+              }}
+            >
+              <option disabled>Select User</option>
+              <option></option>
+              {this.state.users.map((el, i) => (
+                <option key={i} value={el.ID}>
+                  {el.Name}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={() =>
+                console.log(`delete user: ${this.state.inputs.deleteId}`)
+              }
+            >
+              submit
+            </button>
           </fieldset>
         </form>
       </div>

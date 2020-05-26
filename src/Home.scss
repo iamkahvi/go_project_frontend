@@ -3,7 +3,8 @@ $title-color: orange;
 
 .Home {
   h2 {
-    color: $title-color;
+    color: white;
+    background-color: $title-color;
   }
 
   li {
@@ -19,11 +20,26 @@ $title-color: orange;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+      color: white;
     }
   }
 }
 
 form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 15px;
+  align-items: start;
+  fieldset {
+    place-self: center stretch ;
+    border: none;
+    background-color: white;
+    border-radius: 6px;
+    input, button {
+      margin-right: 0px;
+    }
+  }
+
   h3 {
     color: $title-color;
     margin-top: 5px;
