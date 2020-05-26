@@ -25,7 +25,7 @@ interface State {
 const INIT_STATE: State = {
   users: [
     {
-      Name: "Kahvi",
+      Name: "",
       ID: 0,
       CreatedAt: "now",
       UpdatedAt: "now",
@@ -36,6 +36,8 @@ const INIT_STATE: State = {
     name: "",
   },
 };
+
+const url = "http://localhost:8080";
 
 class Home extends React.Component<{}, State> {
   constructor(props: any) {
@@ -50,7 +52,7 @@ class Home extends React.Component<{}, State> {
     this.fetchData();
   }
   async fetchData() {
-    const data = await fetch("http://192.168.0.14:8080/users", {
+    const data = await fetch(url + "/users", {
       headers: { Origin: "example.com" },
     });
     const json: ResponseBody = await data.json();
@@ -84,7 +86,7 @@ class Home extends React.Component<{}, State> {
         return this.capitalize(word);
       })
       .join(" ");
-    const data = await fetch("http://192.168.0.14:8080/add", {
+    const data = await fetch(url + "/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +107,7 @@ class Home extends React.Component<{}, State> {
     if (!window.confirm("Are you sure?")) {
       return;
     }
-    const data = await fetch("http://192.168.0.14:8080/delete", {
+    const data = await fetch(url + "/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -133,7 +135,7 @@ class Home extends React.Component<{}, State> {
             <li key={key}>
               <div className="item">
                 {user.Name}
-                <button onClick={() => this.deleteUser(user.ID)}>X</button>
+                <button onClick={() => this.deleteUser(user.ID)}>delete</button>
               </div>
             </li>
           ))}

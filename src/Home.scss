@@ -2,93 +2,34 @@
 $title-color: orange;
 
 .Home {
-  text-align: left;
-  max-width: 550px;
-  margin: 50px auto;
-
   h2 {
     color: $title-color;
   }
 
-  ul {
-    padding-left: 25px;
-  }
-
   li {
-    margin-bottom: 5px;
     list-style-type: disc;
 
     button {
       outline: none;
-      background: $title-color;
-      color: white;
-      border: 1px solid transparent;
-
-      &:hover {
-        border-color: black;
-      }
+      margin: 0;
     }
 
     .item {
       display: flex;
       justify-content: space-between;
-
+      align-items: center;
+      margin-bottom: 10px;
     }
-  }
-
-  form {
-    margin-top: 25px;
-  }
-
-  fieldset {
-    padding: 15px 10px;
-    margin: 0;
   }
 }
 
 form {
   h3 {
     color: $title-color;
-    margin: 0 0 10px 0;
+    margin-top: 5px;
   }
 
   input {
     outline: none;
-    margin: 0;
-  }
-}
-
-.Home-logo {
-  animation: Home-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.Home-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.Home-intro {
-  font-size: large;
-}
-
-.Home-resources {
-  list-style: none;
-}
-
-.Home-resources>li {
-  display: inline-block;
-  padding: 1rem;
-}
-
-@keyframes Home-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
   }
 }

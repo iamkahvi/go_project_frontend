@@ -30,6 +30,7 @@ const server = express()
         <meta charSet='utf-8' />
         <title>frontend</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
         ${
           assets.client.css
             ? `<link rel="stylesheet" href="${assets.client.css}">`
