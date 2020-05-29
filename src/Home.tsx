@@ -1,21 +1,14 @@
 import * as React from "react";
-import "./Home.scss";
+import "./styles/Home.scss";
+import { ResponseBody, User } from "./types";
 
-interface ResponseBody {
-  list: {
-    users: User[];
-  };
-}
-
-interface User {
-  Name: string;
-  ID: number;
-  CreatedAt: string;
-  UpdatedAt: string;
-  DeletedAt: string;
-}
+// TODO:
+// - create UserList component
+// - create UserListContainer component
+// - implement redux with async actionsk
 
 interface State {
+  isFetching: boolean;
   users: User[];
   inputs: {
     name: string;
@@ -24,13 +17,14 @@ interface State {
 }
 
 const INIT_STATE: State = {
+  isFetching: false,
   users: [
     {
       Name: "",
       ID: 0,
-      CreatedAt: "now",
-      UpdatedAt: "now",
-      DeletedAt: "now",
+      CreatedAt: "",
+      UpdatedAt: "",
+      DeletedAt: "",
     },
   ],
   inputs: {
@@ -45,28 +39,86 @@ class Home extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = INIT_STATE;
-
-    this.fetchData = this.fetchData.bind(this);
-    this.addUser = this.addUser.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   componentDidMount() {
-    this.fetchData();
+    this.fetchUsers();
   }
-  async fetchData() {
-    const data = await fetch(url + "/users", {
-      headers: { Origin: "example.com" },
-    });
-    const json: ResponseBody = await data.json();
-    console.log(json);
 
-    if (json !== null) {
-      const { users } = json.list;
+  fetchUsers = async () => {
+    this.setState({ isFetching: true });
+
+    let json: ResponseBody | undefined;
+    try {
+      const data = await fetch(url + "/users", {
+        method: "GET",
+        headers: { Origin: "example.com" },
+      });
+      json = await data.json();
+      console.log(json);
+    } catch (err) {
+      console.log(err);
+      window.alert(err);
+    }
+
+    if (json) {
+      const { users } = json;
       this.setState({ users });
     }
-  }
 
-  updateInput(key: string, value: any) {
+    this.setState({ isFetching: false });
+  };
+
+  addUser = async (name: string) => {
+    this.setState({ isFetching: true });
+
+    let json: ResponseBody | undefined;
+    try {
+      const data = await fetch(url + "/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user: name }),
+      });
+      json = await data.json();
+    } catch (err) {
+      console.log(err);
+      window.alert(err);
+    }
+
+    if (json) {
+      const { users } = json;
+      this.setState({ users });
+    }
+    this.setState({ isFetching: false });
+  };
+
+  deleteUser = async (id: number) => {
+    if (!window.confirm("Are you sure?")) {
+      return;
+    }
+    this.setState({ isFetching: true });
+
+    let json: ResponseBody | undefined;
+    try {
+      const data = await fetch(url + "/users/" + id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      json = await data.json();
+    } catch (err) {
+      console.log(err);
+      window.alert(err);
+    }
+    this.setState({ isFetching: false });
+
+    this.fetchUsers();
+  };
+
+  updateInput = (key: string, value: any) => {
     this.setState((prevState: State) => ({
       ...prevState,
       inputs: {
@@ -74,73 +126,52 @@ class Home extends React.Component<{}, State> {
         [key]: value,
       },
     }));
-  }
+  };
 
   capitalize = (s: string) => {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
 
-  async addUser() {
-    const { name } = this.state.inputs;
-    const Name = name
+  handleAddUser = () => {
+    const Name = this.state.inputs.name
       .split(" ")
       .map((word) => {
         return this.capitalize(word);
       })
       .join(" ");
-    const data = await fetch(url + "/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user: Name }),
-    });
-    const json: ResponseBody = await data.json();
-    console.log(json);
 
-    if (json !== null) {
-      const { users } = json.list;
-      this.setState({ users });
-    }
-
+    this.addUser(Name);
     this.updateInput("name", "");
-  }
-  async deleteUser(id: number) {
-    if (!window.confirm("Are you sure?")) {
-      return;
-    }
-    const data = await fetch(url + "/delete", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id }),
-    });
-    const json: ResponseBody = await data.json();
-    console.log(json);
+  };
 
-    if (json !== null) {
-      const { users } = json.list;
-      this.setState({ users });
+  handleDeleteUser = (id: number) => {
+    if (id > 0) {
+      this.deleteUser(id);
     }
-  }
-  handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    this.addUser();
-  }
+  };
+
   render() {
+    const { isFetching } = this.state;
     return (
       <div className="Home">
         <h2>Users</h2>
         <ul>
-          {this.state.users.map((user, key) => (
-            <li key={key}>
-              <div className="item">
-                {user.Name}
-                <button onClick={() => this.deleteUser(user.ID)}>delete</button>
-              </div>
-            </li>
-          ))}
+          {isFetching ? (
+            "Loading..."
+          ) : (
+            <>
+              {this.state.users.map((user, key) => (
+                <li key={key}>
+                  <div className="item">
+                    {user.Name}
+                    <button onClick={() => this.handleDeleteUser(user.ID)}>
+                      delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </>
+          )}
         </ul>
         <form>
           <fieldset>
@@ -154,34 +185,36 @@ class Home extends React.Component<{}, State> {
                 this.updateInput("name", e.target.value);
               }}
             ></input>
-            <button type="button" onClick={() => this.addUser()}>
-              submit
+            <button type="button" onClick={() => this.handleAddUser()}>
+              add
             </button>
           </fieldset>
           <fieldset>
             <h3>Delete User</h3>
-            <select
-              id="edit"
-              value={this.state.inputs.deleteId}
-              onChange={(e) => {
-                this.updateInput("deleteId", e.target.value);
-              }}
-            >
-              <option disabled>Select User</option>
-              <option></option>
-              {this.state.users.map((el, i) => (
-                <option key={i} value={el.ID}>
-                  {el.Name}
-                </option>
-              ))}
-            </select>
+            {isFetching ? (
+              "Loading..."
+            ) : (
+              <select
+                id="edit"
+                value={this.state.inputs.deleteId}
+                onChange={(e) => {
+                  this.updateInput("deleteId", e.target.value);
+                }}
+              >
+                <option disabled={true}>Select User</option>
+                <option></option>
+                {this.state.users.map((el, i) => (
+                  <option key={i} value={el.ID}>
+                    {el.Name}
+                  </option>
+                ))}
+              </select>
+            )}
             <button
               type="button"
-              onClick={() =>
-                console.log(`delete user: ${this.state.inputs.deleteId}`)
-              }
+              onClick={() => this.handleDeleteUser(this.state.inputs.deleteId)}
             >
-              submit
+              delete
             </button>
           </fieldset>
         </form>
