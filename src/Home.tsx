@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./styles/Home.scss";
 import { ResponseBody, User } from "./types";
+import UserList from "./components/UserList/UserList";
 
 // TODO:
 // - create UserList component
@@ -155,24 +156,11 @@ class Home extends React.Component<{}, State> {
     return (
       <div className="Home">
         <h2>Users</h2>
-        <ul>
-          {isFetching ? (
-            "Loading..."
-          ) : (
-            <>
-              {this.state.users.map((user, key) => (
-                <li key={key}>
-                  <div className="item">
-                    {user.Name}
-                    <button onClick={() => this.handleDeleteUser(user.ID)}>
-                      delete
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </>
-          )}
-        </ul>
+        <UserList
+          users={this.state.users}
+          isFetching={this.state.isFetching}
+          handleDelete={this.handleDeleteUser}
+        />
         <form>
           <fieldset>
             <h3>Add User</h3>
