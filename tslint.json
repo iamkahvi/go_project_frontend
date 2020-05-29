@@ -19,8 +19,9 @@
     "jsx-wrap-multiline": false,
     "label-position": true,
     "max-line-length": [true, 120],
+    "ordered-imports":false,
     "member-ordering": [
-      true,
+      false,
       "private-before-public",
       "static-before-instance",
       "variables-before-functions"
