@@ -1,11 +1,9 @@
 import * as React from "react";
-import "./styles/Home.scss";
-import { ResponseBody, User } from "./types";
-import UserList from "./components/UserList/UserList";
+import { home as HomeStyles } from "./home.module.scss";
+import { ResponseBody, User } from "../../types";
+import UserList from "../../components/UserList/UserList";
 
 // TODO:
-// - create UserList component
-// - create UserListContainer component
 // - implement redux with async actionsk
 
 interface State {
@@ -154,7 +152,7 @@ class Home extends React.Component<{}, State> {
   render() {
     const { isFetching } = this.state;
     return (
-      <div className="Home">
+      <div className={HomeStyles}>
         <h2>Users</h2>
         <UserList
           users={this.state.users}
