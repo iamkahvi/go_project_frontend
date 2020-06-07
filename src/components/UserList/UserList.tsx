@@ -1,5 +1,7 @@
 import React from "react";
 import { User } from "../../types";
+import { CSSTransition } from "react-transition-group";
+import * as styles from "./userlist.module.scss";
 
 interface Props {
   isFetching: boolean;
@@ -16,7 +18,7 @@ export default function UserList(props: Props) {
         {isFetching ? (
           "Loading..."
         ) : (
-          <>
+          <div className={styles.list}>
             {users.map((user, key) => (
               <li key={key}>
                 <div className="item">
@@ -25,7 +27,7 @@ export default function UserList(props: Props) {
                 </div>
               </li>
             ))}
-          </>
+          </div>
         )}
       </ul>
     </div>
