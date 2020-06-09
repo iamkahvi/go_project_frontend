@@ -1,0 +1,28 @@
+.navContainer {
+    width: 100%;
+    box-sizing: border-box;
+    height: 50px;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 0 10px;
+
+    background-color: var(--orange);
+    margin-bottom: 20px;
+    a {
+        font-weight: 600;
+        padding: 0 10px;
+        color: white;
+    }
+}
+
+.contentContainer {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.wrapper {
+    border: 0px solid white;
+}
