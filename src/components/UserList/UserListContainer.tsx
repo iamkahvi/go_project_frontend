@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ResponseBody, User } from "../../types";
+import { authObject } from "../../pages/Home";
 import UserList from "./UserList";
 
 const url = "http://localhost:8080";
@@ -19,7 +20,10 @@ export default function UserListContainer() {
     try {
       const data = await fetch(url + "/users", {
         method: "GET",
-        headers: { Origin: "example.com" },
+        headers: {
+          Origin: "example.com",
+          ...authObject,
+        },
       });
       json = await data.json();
       console.log(json);
