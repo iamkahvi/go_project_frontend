@@ -10,10 +10,10 @@ export default function UserList(props: Props) {
   return (
     <div className={styles.wrapper}>
       <nav className={styles.navContainer}>
-        <NavLink exact to="/">
+        <NavLink exact={true} to="/">
           Home
         </NavLink>
-        <NavLink exact to="/login">
+        <NavLink exact={true} to="/login">
           Login
         </NavLink>
       </nav>

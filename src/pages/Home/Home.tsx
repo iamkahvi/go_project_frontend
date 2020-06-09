@@ -15,6 +15,11 @@ interface State {
   };
 }
 
+export const authObject = {
+  Authorization:
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlhbWthaHZpQGdtYWlsLmNvbSJ9.1fFHKGQ8a9CVHyVei0dTEo8ErZbS6SNDXfwuyy4eMis",
+};
+
 const INIT_STATE: State = {
   isFetching: false,
   users: [
@@ -51,7 +56,10 @@ class Home extends React.Component<{}, State> {
     try {
       const data = await fetch(url + "/users", {
         method: "GET",
-        headers: { Origin: "example.com" },
+        headers: {
+          Origin: "example.com",
+          ...authObject,
+        },
       });
       json = await data.json();
       console.log(json);
@@ -77,6 +85,7 @@ class Home extends React.Component<{}, State> {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...authObject,
         },
         body: JSON.stringify({ user: name }),
       });
@@ -105,6 +114,7 @@ class Home extends React.Component<{}, State> {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          ...authObject,
         },
       });
       json = await data.json();
